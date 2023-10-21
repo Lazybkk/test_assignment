@@ -21,14 +21,21 @@ export const createUser  = async (payload: IUserPayload) :Promise<User> => {
   })
 }
 
-export const getUser  = async (id: number) :Promise<User | null> => {
+export const getUserById  = async (id: string) :Promise<User | null> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({id: id})
   if (!user) return null
   return user
 }
 
-export const updateUser  = async (id: number, payload: IUserPayload) :Promise<User | null> => {
+export const checkUserExist  = async (email: string) :Promise<boolean> => {
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne({email})
+  if (!user) return false
+  return true
+}
+
+export const updateUser  = async (id: string, payload: IUserPayload) :Promise<User | null> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({id: id})
   if (!user) return null
@@ -38,7 +45,7 @@ export const updateUser  = async (id: number, payload: IUserPayload) :Promise<Us
   });
 }
 
-export const deleteUser  = async (id: number) :Promise<boolean> => {
+export const deleteUser  = async (id: string) :Promise<boolean> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({id: id})
   if (!user) return false

@@ -1,6 +1,14 @@
 import {Get, Route, Tags, Post, Body, Path, Put, Delete} from "tsoa";
 import {User} from '../models'
-import {getUsers, createUser, IUserPayload, getUser, deleteUser, updateUser} from '../repositories/user.repository'
+import {
+    getUsers, 
+    createUser, 
+    IUserPayload, 
+    getUserById, 
+    deleteUser, 
+    updateUser,
+    checkUserExist
+} from '../repositories/user.repository'
 
 @Route("users")
 @Tags("User")
@@ -12,23 +20,28 @@ export default class UserController {
 
     @Post("/")
     public async createUser(@Body() body: IUserPayload): Promise<User> {
+        const email = body.email
+        const isUserExist = await checkUserExist(email)
+        if (isUserExist) {
+            throw Error("User exist")
+        }
         return createUser(body)
     }
 
 
     @Get("/:id")
-    public async getUser(@Path() id: string): Promise<User | null> {
-        return getUser(Number(id))
+    public async getUserById(@Path() id: string): Promise<User | null> {
+        return getUserById(id)
     }
 
     @Put("/:id")
     public async updateUser(@Path() id: string, @Body() body: IUserPayload): Promise<User | null> {
-        return updateUser(Number(id), body)
+        return updateUser(id, body)
     }
 
     @Delete("/:id")
     public async deleteUser(@Path() id: string): Promise<boolean> {
-        return deleteUser(Number(id))
+        return deleteUser(id)
     }
 
 }

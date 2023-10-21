@@ -2,5 +2,5 @@ from django.db import models
 
 
 class Product(models.Model):
-    text = models.TextField(blank=False, null=False)
-    date_posted = models.DateField(auto_now=True)
+    name = models.CharField('Product name', max_length=100)  # required field
+    price = models.PositiveIntegerField('Product price')

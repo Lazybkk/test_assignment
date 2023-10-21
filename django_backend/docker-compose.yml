@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: .
+    links:
+      - postgres:postgres
+    volumes:
+      - web-django:/usr/src/app
+      - web-static:/usr/src/app/static
+    env_file: .env
+    environment:
+      DEBUG: 'true'
+    ports:
+      - "8080:8080"
+    command: /usr/local/bin/gunicorn wsgi:application -w 2 -b :8080
+
+  postgres:
+    restart: always
+    image: postgres:12
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+volumes:
+  web-django:
+  web-static:
+  pgdata:

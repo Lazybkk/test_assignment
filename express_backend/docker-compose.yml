@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data/
     ports:
       - 5433:5432
     healthcheck:
@@ -22,6 +22,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./src:/app/src
+      - /usr/src/app/node_modules
     ports:
       - "8000:8000"
     depends_on: 
@@ -35,7 +36,7 @@ services:
 
   proxy:
     restart: always
-    build: ../proxy
+    build: ../django_backend
     depends_on: 
       - app
     expose:
@@ -43,3 +44,6 @@ services:
     ports:
       - "8080:8080"
     command: /usr/local/bin/mitmdump --mode reverse:http://app:8000
+    
+volumes:
+  pgdata:

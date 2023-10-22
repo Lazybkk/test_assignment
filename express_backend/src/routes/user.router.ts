@@ -5,12 +5,14 @@ import UserController from "../controllers/user.controller";
 const createUserValidate = Joi.object().keys({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
+  password: Joi.string().required(),
   email: Joi.string().email().required(),
 });
 
 const updateUserValidate = Joi.object().keys({
   firstName: Joi.string(),
   lastName: Joi.string(),
+  password: Joi.string(),
 });
 
 

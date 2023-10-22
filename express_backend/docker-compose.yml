@@ -10,7 +10,7 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5433:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 30s
@@ -32,3 +32,14 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_HOST=db
+
+  proxy:
+    restart: always
+    build: ../proxy
+    depends_on: 
+      - app
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    command: /usr/local/bin/mitmdump --mode reverse:http://app:8000

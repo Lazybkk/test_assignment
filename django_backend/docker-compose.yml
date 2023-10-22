@@ -13,8 +13,8 @@ services:
     environment:
       DEBUG: 'true'
     ports:
-      - "8080:8080"
-    command: /usr/local/bin/gunicorn wsgi:application -w 2 -b :8080
+      - "5000:5000"
+    command: /usr/local/bin/gunicorn wsgi:application -w 2 -b :5000
 
   postgres:
     restart: always
